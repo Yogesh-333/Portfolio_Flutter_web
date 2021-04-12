@@ -1,3 +1,4 @@
 # Auto detect text files and perform LF normalization
 *.c linguist-detectable=false
 *.cpp linguist-detectable=false
+*.h linguist-detectable=false

@@ -1,4 +1,4 @@
 # Portfolio_Flutter_web
- Web application using flutter 2 
- 
- https://yogesh-333.github.io/
+Simple Portfolio Web application created using flutter 2
+Neumorphic design
+https://yogesh-333.github.io/

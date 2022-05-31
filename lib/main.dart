@@ -43,7 +43,8 @@ class MyHomePage extends StatefulWidget {
   State<MyHomePage> createState() => _MyHomePageState();
 }
 
-class _MyHomePageState extends State<MyHomePage> {
+class _MyHomePageState extends State<MyHomePage>
+    with SingleTickerProviderStateMixin {
   String imgUrl = "images/myimage1.jpg";
   double initX = 0.0, initY = 0.0;
   bool _isDarkTheme = false;
@@ -51,6 +52,35 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      bottomNavigationBar: BottomNavigationBar(
+        //backgroundColor:  _textColor(context),
+        items: <BottomNavigationBarItem>[
+          BottomNavigationBarItem(
+            icon: FaIcon(
+              FontAwesomeIcons.github,
+              color: Color(0xFF440089),
+            ),
+            label: 'GitHub',
+
+          ),
+          BottomNavigationBarItem(
+            icon: FaIcon(
+              FontAwesomeIcons.linkedinIn,
+              color: Color(0xFF144477),
+            ),
+            label: 'LinkedIn',
+          ),
+          BottomNavigationBarItem(
+            icon: FaIcon(
+              FontAwesomeIcons.bloggerB,
+              color: Color(0xFFFF7E09),
+            ),
+            label: 'Blog',
+          ),
+        ],
+        currentIndex: 0,
+        onTap: _onItemTapped,
+      ),
       floatingActionButton: Padding(
         padding: EdgeInsets.only(
             bottom: SizerUtil.deviceType == DeviceType.tablet ? 1.h : 0.0,
@@ -81,154 +111,18 @@ class _MyHomePageState extends State<MyHomePage> {
       backgroundColor: NeumorphicTheme.baseColor(context),
       body: Stack(
         children: [
-          StreamBuilder<GyroscopeEvent>(
-              stream: SensorsPlatform.instance.gyroscopeEvents,
-              builder: (context, snapshot) {
-                if (snapshot.hasData) {
-                  if (snapshot.data.y.abs() > 0.0)
-                    initX = initX + (snapshot.data.y);
-                  if (snapshot.data.x.abs() > 0.0)
-                    initY = initY + (snapshot.data.x);
-                }
-                return Positioned(
-                  left: 10 - initX,
-                  right: 10 + initX,
-                  top: 10 - initY,
-                  bottom: 200 + initY,
-                  child: Center(
-                    child: Container(
-                      child: Stack(
-                        children: [
-                          Padding(
-                            padding: const EdgeInsets.all(15.0),
-                            child: Container(
-                              width: 230,
-                              height: 330,
-                              decoration: BoxDecoration(
-                                image: DecorationImage(
-                                    isAntiAlias: true,
-                                    opacity: 0.8,
-                                    image: AssetImage(imgUrl),
-                                    colorFilter: new ColorFilter.mode(
-                                        Colors.white.withOpacity(.1),
-                                        BlendMode.srcOver),
-                                    fit: BoxFit.cover),
-                                borderRadius: BorderRadius.circular(10),
-                              ),
-                              child: BackdropFilter(
-                                filter: ImageFilter.blur(sigmaX: 4, sigmaY: 4),
-                                child: Container(
-                                  decoration: new BoxDecoration(
-                                      borderRadius: BorderRadius.circular(10),
-                                      color: Colors.white.withOpacity(0.0)),
-                                ),
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                );
-              }),
-          Column(
-            children: [
-              SizedBox(
-                height: 65.h,
-              ),
-              Column(
-                children: [
-                  NeumorphicText(
-                    "Yogesh Kumar G",
-                    style: NeumorphicStyle(
-                      depth: 50, //customize depth here
-                      color: _textColor(context),
-
-                        shadowDarkColor: Color(0xffc27571).withOpacity(1),
-
-                        lightSource: LightSource.topRight//customize color here
-                    ),
-                    textStyle: NeumorphicTextStyle(
-                        fontFamily:'Rubik',
-                        fontSize: 6.h,
-                        fontWeight: FontWeight.w700 //customize size here
-                      // AND others usual text style properties (fontFamily, fontWeight, ...)
-                    ),
-                  ),
-                  SizedBox(
-                    height: 0.5.h,
-                  ),
-                  NeumorphicText(
-                    "FullStack Dev",
-                    style: NeumorphicStyle(
-                      depth: 14, //customize depth here
-                      color: _textColor(context),
-
-                        shadowDarkColor: Color(0xff78ff9a).withOpacity(1),
-                        lightSource: LightSource.topRight//customize color here
-                    ),
-                    textStyle: NeumorphicTextStyle(
-                        fontFamily:'Rubik',
-                        fontSize: 5.h,
-                        fontWeight: FontWeight.w700 //customize size here
-                      // AND others usual text style properties (fontFamily, fontWeight, ...)
-                    ),
-                  ),
-                ],
-              ),
-              SizedBox(
-                height: 16.h,
-              ),
-              Container(
-                child: Row(
-                  children: [
-                    SizedBox(
-                      width: 33.33.w,
-                      height: 5.h,
-                      child: ElevatedButton(
-                        style: ElevatedButton.styleFrom(
-                            primary: Color(0xFF440089)
-                        ),
-                        onPressed: () =>
-                            launchURL("https://github.com/Yogesh-333"),
-                        child: FaIcon(FontAwesomeIcons.github),
-                      ),
-                    ),
-                    SizedBox(
-                      width: 33.33.w,
-                      height: 5.h,
-                      child: ElevatedButton(
-                        style: ElevatedButton.styleFrom(
-                          primary: Color(0xFF144477)
-                        ),
-                        child: FaIcon(FontAwesomeIcons.linkedinIn),
-                        onPressed: () =>
-                            launchURL("https://github.com/Yogesh-333"),
-                      ),
-                    ),
-                    SizedBox(
-                      width: 33.33.w,
-                      height: 5.h,
-                      child: ElevatedButton(
-                        style: ElevatedButton.styleFrom(
-                            primary: Color(0xFFFF7E09)
-                        ),
-                        onPressed: () => launchURL(
-                            "https://unknownauthor-poems.blogspot.com/"),
-                        child: FaIcon(FontAwesomeIcons.bloggerB),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ],
+          Container(
+            child: Center(
+              child: TiltWidget(
+                  yaxis: (MediaQuery.of(context).size.width / 2) / 2,
+                  image: imgUrl,
+                  text: 'Yogesh Kumar',
+                  subText: 'FullStack Dev'),
+            ),
           ),
-
-
           Positioned(
             top: 340,
             right: 350,
-
             child: Row(
               children: [
                 NeumorphicIcon(
@@ -236,7 +130,6 @@ class _MyHomePageState extends State<MyHomePage> {
                   size: 25.sp,
                   style: NeumorphicStyle(
                       color: Color(0xff9560c4),
-
                       shadowDarkColor: Color(0xff9560c4).withOpacity(1),
                       lightSource: LightSource.topRight),
                 ),
@@ -264,7 +157,6 @@ class _MyHomePageState extends State<MyHomePage> {
             ),
           ),
           Positioned(
-
             top: 100,
             right: 180,
             child: Container(
@@ -378,7 +270,6 @@ class _MyHomePageState extends State<MyHomePage> {
           Positioned(
             top: 250,
             left: 50,
-
             child: NeumorphicIcon(
               FlutterLogoIcon.flutter,
               size: 60.sp,
@@ -386,24 +277,6 @@ class _MyHomePageState extends State<MyHomePage> {
                   color: Color(0xff36C4F0),
                   shadowDarkColor: Color(0xff36C4F0).withOpacity(1),
                   lightSource: LightSource.topRight),
-            ),
-          ),
-          Positioned(
-            left: 10,
-            right: 10,
-            top: 10,
-            bottom: 200,
-            child: Center(
-              child: Container(
-                width: 250,
-                height: 350,
-                decoration: BoxDecoration(
-                  border: Border.all(color: Colors.white, width: .1),
-                  image: DecorationImage(
-                      image: AssetImage(imgUrl), fit: BoxFit.cover),
-                  borderRadius: BorderRadius.circular(10),
-                ),
-              ),
             ),
           ),
         ],
@@ -428,11 +301,183 @@ class _MyHomePageState extends State<MyHomePage> {
     }
   }
 
-  launchURL(String url) async {
-    if (await canLaunch(url)) {
-      await launch(url, forceWebView: true);
-    } else {
-      throw 'Could not launch $url';
+  void _onItemTapped(int index) async {
+    if (index == 0) {
+      String url = "https://github.com/Yogesh-333";
+      if (await canLaunch(url)) {
+        await launch(url, forceWebView: true);
+      } else {
+        throw 'Could not launch $url';
+      }
     }
+    if (index == 1) {
+      String url = "https://www.linkedin.com/in/yogeshkumar333/";
+      if (await canLaunch(url)) {
+        await launch(url, forceWebView: true);
+      } else {
+        throw 'Could not launch $url';
+      }
+    }
+    if (index == 2) {
+      String url = "https://unknownauthor-poems.blogspot.com/";
+      if (await canLaunch(url)) {
+        await launch(url, forceWebView: true);
+      } else {
+        throw 'Could not launch $url';
+      }
+    }
+  }
+}
+
+class TiltWidget extends StatefulWidget {
+  final double yaxis;
+  final String image;
+  final String text;
+  final String subText;
+
+  TiltWidget({this.yaxis, this.image, this.text, this.subText});
+
+  @override
+  _TiltWidgetState createState() => _TiltWidgetState();
+}
+
+class _TiltWidgetState extends State<TiltWidget> {
+  double x = 0.0;
+  double y = 0.0;
+  double borderValueY = 150.0;
+  double borderValueX = 200.0;
+  double beginY = 0.0;
+  double endY = 0.0;
+  double beginX = 0.0;
+  double endX = 0.0;
+  Color textColor = Colors.white;
+
+  @override
+  Widget build(BuildContext context) {
+    return TweenAnimationBuilder(
+      curve: Curves.easeOut,
+      duration: Duration(milliseconds: 300),
+      tween: Tween(
+        begin: beginX,
+        end: endX,
+      ),
+      builder: (context, valueX, child) => TweenAnimationBuilder(
+        curve: Curves.easeOut,
+        duration: Duration(milliseconds: 300),
+        tween: Tween(
+          begin: beginY,
+          end: endY,
+        ),
+        builder: (context, valueY, child) {
+          return Stack(
+            children: [
+              Transform(
+                transform: Matrix4.identity()
+                  ..setEntry(3, 2, 0.001)
+                  ..rotateX(valueX)
+                  ..rotateY(valueY),
+                alignment: FractionalOffset.center,
+                child: MouseRegion(
+                  onHover: (details) {
+                    double yvalue = widget.yaxis - details.localPosition.dx;
+                    double xvalue = (MediaQuery.of(context).size.height / 2) -
+                        details.localPosition.dy;
+                    print(xvalue);
+                    if (yvalue <= borderValueY && yvalue >= -borderValueY) {
+                      setState(() {
+                        double oldRange = (borderValueY - (-borderValueY));
+                        double newRange = (0.35 - (-0.35));
+                        double newValue =
+                            (((yvalue - (-borderValueY)) * newRange) /
+                                    oldRange) +
+                                (-0.35);
+                        beginY = y;
+                        y = newValue;
+                        endY = y;
+                        oldRange = (borderValueX - (-borderValueX));
+                        newRange = (0.35 - (-0.35));
+                        newValue = (((-xvalue - (-borderValueX)) * newRange) /
+                                oldRange) +
+                            (-0.35);
+                        beginX = x;
+                        x = newValue;
+                        endX = x;
+                      });
+                    }
+                  },
+                  onExit: (event) {
+                    print('exited');
+                    setState(() {
+                      y = 0.0;
+                      x = 0.0;
+                      beginY = 0.0;
+                      endY = 0.0;
+                      beginX = 0.0;
+                      endX = 0.0;
+                    });
+                  },
+                  child: Stack(
+                    children: [
+                      Container(
+                        height: 400.0,
+                        width: 250.0,
+                        decoration: BoxDecoration(
+                          shape: BoxShape.rectangle,
+                          border: Border.all(
+                              color: const Color(0xFF1F1F1F),
+                              width: 4.0,
+                              style: BorderStyle.solid), //Border.all
+                          /*** The BorderRadius widget  is here ***/
+                          borderRadius: BorderRadius.all(
+                            Radius.circular(10),
+                          ),
+                          image: DecorationImage(
+                            fit: BoxFit.fill,
+                            image: AssetImage(widget.image),
+                          ),
+                        ),
+                      ),
+                      Positioned(
+                        bottom: 20.0,
+                        left: 20.0,
+                        child: Transform(
+                          transform: Matrix4.identity()
+                            ..setEntry(3, 2, 0.001)
+                            ..translate(0.0, 0.0, -30.0),
+                          alignment: FractionalOffset.center,
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                widget.text,
+                                style: TextStyle(
+                                  fontFamily: 'Rubik',
+                                  fontSize: 3.h,
+                                  fontWeight: FontWeight.w700,
+                                  color: textColor,
+                                ),
+                              ),
+                              Text(
+                                widget.subText,
+                                style: TextStyle(
+                                  fontFamily: 'Rubik',
+                                  fontSize: 2.h,
+                                  fontWeight: FontWeight.w700,
+                                  color: textColor,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ],
+          );
+        },
+      ),
+    );
   }
 }

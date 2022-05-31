@@ -16,7 +16,7 @@ class MyApp extends StatelessWidget {
     return Sizer(builder: (context, orientation, deviceType) {
       return NeumorphicApp(
         debugShowCheckedModeBanner: false,
-        title: 'YK_Portfolio',
+        title: 'Yogesh Kumar',
         themeMode: ThemeMode.light,
         theme: NeumorphicThemeData(
           baseColor: Colors.grey.shade100,
@@ -53,6 +53,10 @@ class _MyHomePageState extends State<MyHomePage>
   Widget build(BuildContext context) {
     return Scaffold(
       bottomNavigationBar: BottomNavigationBar(
+        selectedItemColor: Colors.black,
+        unselectedItemColor: Colors.black,
+        selectedLabelStyle:TextStyle(fontSize: 15) ,
+        unselectedLabelStyle: TextStyle(fontSize: 15) ,
         //backgroundColor:  _textColor(context),
         items: <BottomNavigationBarItem>[
           BottomNavigationBarItem(
@@ -61,7 +65,6 @@ class _MyHomePageState extends State<MyHomePage>
               color: Color(0xFF440089),
             ),
             label: 'GitHub',
-
           ),
           BottomNavigationBarItem(
             icon: FaIcon(
@@ -329,7 +332,7 @@ class _MyHomePageState extends State<MyHomePage>
   }
 }
 
-class TiltWidget extends StatefulWidget {
+class TiltWidget extends StatefulWidget  {
   final double yaxis;
   final String image;
   final String text;
@@ -341,7 +344,7 @@ class TiltWidget extends StatefulWidget {
   _TiltWidgetState createState() => _TiltWidgetState();
 }
 
-class _TiltWidgetState extends State<TiltWidget> {
+class _TiltWidgetState extends State<TiltWidget>  {
   double x = 0.0;
   double y = 0.0;
   double borderValueY = 150.0;
@@ -351,7 +354,7 @@ class _TiltWidgetState extends State<TiltWidget> {
   double beginX = 0.0;
   double endX = 0.0;
   Color textColor = Colors.white;
-
+  //static final appContainer = html.window.document.querySelectorAll('flt-glass-pane')[0];
   @override
   Widget build(BuildContext context) {
     return TweenAnimationBuilder(
@@ -378,6 +381,7 @@ class _TiltWidgetState extends State<TiltWidget> {
                   ..rotateY(valueY),
                 alignment: FractionalOffset.center,
                 child: MouseRegion(
+
                   onHover: (details) {
                     double yvalue = widget.yaxis - details.localPosition.dx;
                     double xvalue = (MediaQuery.of(context).size.height / 2) -
